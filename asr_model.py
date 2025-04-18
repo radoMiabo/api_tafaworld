@@ -8,14 +8,16 @@ class ASRModel:
     def __init__(self):
         # Initialisation du modèle
         model_path = "models/whisper_tiny_mg"
-        
+        print("initiation de ASR Model...")
         self.processor = WhisperProcessor.from_pretrained(model_path)
         self.model = WhisperForConditionalGeneration.from_pretrained(model_path)
         self.forced_decoder_ids = self.processor.get_decoder_prompt_ids(language="mg", task="transcribe")
         self.model.config.forced_decoder_ids = self.forced_decoder_ids
         self.recognizer = Recognizer()
+        print("Terminé")
 
     def recognize(self,audio_path, lang: str):
+        print("Transcription audio...")
         if lang== "mg": #pour l'ASR en malgache
             sample,sr = librosa.load(audio_path, sr=16000)
             # sample, sr = librosa.loa
@@ -35,3 +37,4 @@ class ASRModel:
                 return -1
             except UnknownValueError:
                 return "Je n'ai pas compris"
+        print("Terminé")

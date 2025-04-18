@@ -30,16 +30,20 @@ def synthesize(text: str = Form(...), lang: str = Form(...)):
 
 @app.post("/recognize")
 async def recognize(audio : UploadFile = File(...), lang: str = Form(...)):
+    print("Got post for ASR")
     with tempfile.NamedTemporaryFile(delete= False, suffix= ".aac") as tmp:
         tmp.write(await audio.read())
         tmp_path = tmp.name
     recognizedText = appBackend.ASRModel.recognize(audio_path= tmp_path, lang= lang)
+    print("Responding client")
     return {"text" : f"{recognizedText}"}
 
 @app.post("/translate")
 async def translate(text: str = Form(...), sourceLang: str = Form(...), destLang: str = Form(...) ):
+    print("Got post for TTS")
     translated = await appBackend.translate(text= text, sourceLang= sourceLang, destLang= destLang)
     if translated == -1:
         return Response(status_code= 404)
     else:
+        print("Responding client")
         return {"text" : translated}

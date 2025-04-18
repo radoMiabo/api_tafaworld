@@ -7,12 +7,15 @@ from gtts import gTTS, gTTSError
 
 class TTSModel():
     def __init__(self):
+        print("initiation de TTS...")
         model_path = "models/tts_female"
         self.model = VitsModel.from_pretrained(model_path, local_files_only= True)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.gtts_API = gTTS(" ", lang= "fr",slow= True)
+        print("Terminé")
     
     def synthesis(self, text: str, lang: str, audioPath: str ):
+        print("Synthèse vocale...")
         if lang == "mg": #pour la TTS en Malgache
             inputs = self.tokenizer(text= text, return_tensors= "pt")
             with torch.inference_mode():
@@ -24,5 +27,7 @@ class TTSModel():
             try:
                 self.gtts_API.save(audioPath)
             except gTTSError as e:
+                print("Erreur")
                 return -1
+        print("Terminée")
         return 0
