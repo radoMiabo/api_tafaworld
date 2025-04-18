@@ -30,7 +30,7 @@ def synthesize(text: str = Form(...), lang: str = Form(...)):
 
 @app.post("/recognize")
 async def recognize(audio : UploadFile = File(...), lang: str = Form(...)):
-    with tempfile.NamedTemporaryFile(delete= False, suffix= ".wav") as tmp:
+    with tempfile.NamedTemporaryFile(delete= False, suffix= ".aac") as tmp:
         tmp.write(await audio.read())
         tmp_path = tmp.name
     recognizedText = appBackend.ASRModel.recognize(audio_path= tmp_path, lang= lang)

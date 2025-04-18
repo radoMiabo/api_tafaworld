@@ -18,6 +18,7 @@ class ASRModel:
     def recognize(self,audio_path, lang: str):
         if lang== "mg": #pour l'ASR en malgache
             sample,sr = librosa.load(audio_path, sr=16000)
+            # sample, sr = librosa.loa
             input_features = self.processor(sample, sampling_rate=sr, return_tensors="pt").input_features
             predicted_ids = self.model.generate(input_features)
             transcription = self.processor.batch_decode(predicted_ids, skip_special_tokens=False)
